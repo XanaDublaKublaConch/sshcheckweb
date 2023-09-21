@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Check server for SSH KEX configuration.</title>
+    <link rel="stylesheet" href="/styles.css" type="text/css" />
+</head>
+<body id="sshcheck">
+<div class="page_wrapper">
+    <section class="intro" id="sshcheck-intro">
+        <header role="banner">
+            <h1>SSH Checker</h1>
+            <h2>Check your <abbr title="Secure SHell">SSH</abbr> <abbr title="Key EXchange">KEX</abbr> configuration</h2>
+        </header>
+        <div class="summary" id="sshcheck-summary" role="article">
+            <form method="post">
+                <div class="input_line1">
+                    <label for="host_input" id="host_label">Host</label>
+                    <input id="host_input" type="text" name="host" value="{{ host }}" title="Hostname or IP address." />
+                </div>
+                <div class="input_line2">
+                    <label for="port_input" id="port_label">Port</label>
+                    <input id="port_input" type="number" name="port" value="{{ port }}" title="Listening port of sshd service" />
+                    <input type="submit" />
+                </div>
+            </form>
+        </div>
+    </section>
+    <section class="main-section" id="main-section">
+        <div class="table-wrapper" id="table-weapper" role="article">
+        {% if svr is defined -%}
+            <table class="styled-table">
+                <caption>Results for
+                    <span class="server-name">{{ svr.hostname }}</span>
+                    :
+                    <span class="server-port">{{ svr.port }}</span> (
+                    <span class="server-ip">{{ svr.ip_address }}</span>)
+                </caption>
+                <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Policy: approved</th>
+                    <th>Policy: contained</th>
+                    <th>Policy: override</th>
+                    <th>Policy: BAD!</th>
+                </tr>
+                </thead>
+                {% for idx in ['kex', 'hka', 'ciphers', 'mac'] -%}
+                <tr class="{{ idx }}_row" id="tr_{{ idx }}">
+                    <td>{{ idx.upper() }}</td>
+                    <td class="approved">{{ svr[idx]['approved'] | join(", ") }}</td>
+                    <td class="contained">{{ svr[idx]['contained'] | join(", ") }}</td>
+                    <td class="policy_overrides">{{ svr[idx]['policy_overrides'] | join(", ") }}</td>
+                    <td class="bad">{{ svr[idx]['bad'] | join(", ") }}</td>
+                </tr>
+                {% endfor -%}
+                <tr class="compress-row" id="tr_compress">
+                    <td>Compression&nbsp;Algorithms</td>
+                    <td colspan="4" class="td_centered">{{ svr.compress | join(", ") }}</td>
+                </tr>
+            </table>
+            <div class="footer">
+                Server sent
+                <span class="{{ svr.host_key_status.name.lower() }}">
+                    {{ svr.host_key_status.name.lower() }} {{ svr.host_key_type }}
+                </span>
+                key.
+            </div>
+        {% else -%}
+            {{ message }}
+        {% endif -%}
+        </div>
+    </section>
+</div>
+</body>
+</html>

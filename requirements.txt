@@ -1,0 +1,7 @@
+fastapi
+pyyaml
+uvicorn[standard]
+jinja2
+python-multipart
+paramiko
+git+https://github.com/XanaDublaKublaConch/sshcheck/

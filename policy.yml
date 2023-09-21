@@ -1,0 +1,46 @@
+# encryption ciphers
+ciphers:
+  approved:
+    - chacha20-poly1305@openssh.com
+    - aes256-ctr
+    - aes256-gcm@openssh.com
+    - aes192-ctr
+    - aes128-gcm@openssh.com
+    - aes128-ctr
+  contained: []
+  policy_overrides: []
+# message integrity
+mac:
+  approved:
+    - umac-128@openssh.com
+    - umac-128-etm@openssh.com
+    - hmac-sha2-512
+    - hmac-sha2-512-etm@openssh.com
+    - hmac-sha2-256-etm@openssh.com
+    - hmac-sha2-256
+  contained: []
+  policy_overrides: []
+# SSH Key establishment, Key exchange
+kex:
+  approved:
+    - curve25519-sha256@libssh.org
+    - diffie-hellman-group-exchange-sha256
+  contained: [ ]
+  policy_overrides:
+    - ecdh-sha2-nistp256
+
+# Signature Algorithms (Host Key Algorithm)
+hka:
+  approved:
+    - ssh-ed25519
+  contained:
+    - ssh-rsa
+    - rsa-sha2-512
+    - rsa-sha2-256
+  policy_overrides: []
+# SSH Key formats
+key_format:
+  approved:
+    - ssh-ed25519
+  contained: [ ]
+  policy_overrides: []
